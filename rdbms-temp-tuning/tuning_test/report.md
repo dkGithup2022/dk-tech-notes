@@ -1,8 +1,22 @@
+---
+title: "튜닝 테스트 리포트"
+parent: "RDBMS SQL 쿼리 튜닝 — temp 테이블 회피"
+nav_order: 2
+permalink: /rdbms-temp-tuning/tuning-test-report/
+---
+
 # tuning_test 실험 결과 리포트
+{: .no_toc }
 
-본문 `resume/notes/slow-query-migration-v2.md` 3장의 세 회피 카드 (근원 회피 / temp 크기 줄이기 / 2단계 분리) 를 실제 MySQL 8.0.31 에서 BEFORE/AFTER 로 검증한 결과.
+## 목차
+{: .no_toc .text-delta }
 
-실행 방법은 `README.md` 참조. 원문 EXPLAIN 출력은 `explains/case-*.txt` 원본.
+1. TOC
+{:toc}
+
+본문([RDBMS SQL 쿼리 튜닝]({{ "/rdbms-temp-tuning/" | relative_url }})) 회피 카드 세 개 (근원 회피 / temp 크기 줄이기 / 2단계 분리) 를 실제 MySQL 8.0.31 에서 BEFORE/AFTER 로 검증한 결과.
+
+실행 방법은 [`README.md`](https://github.com/dkGithup2022/dk-tech-notes/blob/main/rdbms-temp-tuning/tuning_test/README.md) 참조. 원문 EXPLAIN 출력은 [`explains/case-*.txt`](https://github.com/dkGithup2022/dk-tech-notes/tree/main/rdbms-temp-tuning/tuning_test/explains) 원본.
 
 ---
 

@@ -1,9 +1,18 @@
 ---
-layout: post
-title: "ES 노드 단위 처리량 한계 측정 — single-shard test 기반 샤드 사이징"
-date: 2026-04-26
-categories: [elasticsearch]
+title: "ES 노드 처리량 한계 측정 — 샤드 사이징"
+nav_order: 2
+permalink: /es-shard-sizing/
 ---
+
+# ES 노드 단위 처리량 한계 측정 — single-shard test 기반 샤드 사이징
+{: .no_toc }
+
+## 목차
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
 
 > 이력서에 첨부하는 작업 정리 글. 사내 데이터는 공개할 수 없어 동등한 기술 원리로 재현한 값 또는 외부 자료 인용으로 대체합니다.
 

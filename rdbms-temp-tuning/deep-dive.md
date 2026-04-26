@@ -1,6 +1,20 @@
-# Temp 테이블 메커니즘 — MySQL 8.0 / Oracle 19c
+---
+title: "Temp 테이블 메커니즘 (MySQL 8.0 / Oracle 19c)"
+parent: "RDBMS SQL 쿼리 튜닝 — temp 테이블 회피"
+nav_order: 1
+permalink: /rdbms-temp-tuning/deep-dive/
+---
 
-본 자료는 `slow-query-migration-v2.md` 본문의 보조 자료다. 기준 버전은 MySQL 8.0 / Oracle Database 19c 이며, 본문이 MySQL 위주이므로 Oracle 은 대비 형식으로 나란히 배치했다.
+# Temp 테이블 메커니즘 — MySQL 8.0 / Oracle 19c
+{: .no_toc }
+
+## 목차
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+본 자료는 본문([RDBMS SQL 쿼리 튜닝]({{ "/rdbms-temp-tuning/" | relative_url }}))의 보조 자료다. 기준 버전은 MySQL 8.0 / Oracle Database 19c 이며, 본문이 MySQL 위주이므로 Oracle 은 대비 형식으로 나란히 배치했다.
 
 본문과의 매핑:
 

@@ -1,30 +1,52 @@
 ---
-layout: post
-title: "RDBMS SQL 쿼리 튜닝 — 레거시 쿼리의 temp 테이블 원인·회피·검증"
-date: 2026-04-26
-categories: [rdbms, mysql, oracle]
+title: "RDBMS SQL 쿼리 튜닝 — temp 테이블 회피"
+nav_order: 3
+has_children: true
+permalink: /rdbms-temp-tuning/
 ---
 
-재활 이후 이력서에 올릴 때, 이력서에서는 양 때문에 표현이 안 되는 것을 여기 올립니다.
+# RDBMS SQL 쿼리 튜닝 — 레거시 쿼리의 temp 테이블 원인·회피·검증
+{: .no_toc }
 
-근무 중 작성한 레거시 SQL 쿼리 퍼포먼스 튜닝 사례집에 있던 내용이며, 시간이 지나면서 개념적 설명이 추가된 내용이 존재합니다.
+## 목차
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+
+롯데 계열사 물류 관련 기능의 퍼포먼스 튜닝을 시행하면서 정리한 기록입니다.
+
+개선 중, 반복되는 해결 패턴을 모으고 기술적 원인을 서술합니다. 사내 노션에 정리해 두었으나, 본 글에서는 개념 설명과 테스트용 Docker 세팅을 함께 첨부해 다시 업로드합니다.
+
+사측 실제 데이터나 쿼리는 다루지 않고, 범용적으로 사용할 수 있는 방법론에 초점을 맞춥니다.
 
 ---
 
 ## 들어가며
 
-본 글은 대기업 SI/SM, 금융권 등에서 발견되는 관리되지 않은 쿼리에 대한 퍼포먼스 튜닝을 다룹니다.
+롯데 계열사 SI/SM 환경에서 SQL 퍼포먼스 튜닝을 맡아, 1000~2000라인 단위의 레거시 쿼리를 반복적으로 개선했습니다.
 
-아래의 제약을 극복하고, 개발자에게 제한적인 권한과 행동 반경 안에서 최선의 쿼리 결과를 뽑아내는 것을 목표로 합니다.
+금융권·대기업 SI/SM 환경에서 흔히 만나는 제약은 다음과 같습니다.
 
 - 1000~2000+ 라인의 쿼리
 - 복잡한 계약 구조
-- 업체간 책임에 대한 위약 조건이 존재
-- 리아키텍처 등 엔지니어링적인 근원적 해결책 적용 불가
+- 업체 간 책임에 대한 위약 조건이 존재
+- 리아키텍처 등 엔지니어링적 근원 해결책 적용 불가
+
+본 글은 이러한 제약 위에서 쿼리, 혹은 쿼리와 인터페이스하는 애플리케이션 로직만 수정해 운영 가능한 수준의 성능을 확보하는 방법을 다룹니다. 직접 수행한 경험과, 그 과정에서 반복적으로 통했던 해결 패턴을 함께 정리합니다.
 
 ---
 
-## 2장. Temp 테이블의 기술적 원인
+## 기술적 해결범위 : temp 테이블에 대처하기
+
+1000라인이 넘는 쿼리의 성능이 보장되지 않는 가장 흔한 이유는, 인덱스를 사용할 수 없거나 merge 되지 않는 구문 때문에 쿼리 depth 중간에 temp table 이 생기고, 그 위에서 fullscan 이 강제된다는 점입니다.
+
+본 글에서는 temp 테이블의 발생 원인을 정리한 뒤, 그 회피·검증 패턴을 다룹니다.
+
+---
+
+## Temp 테이블의 기술적 원인
 
 temp 가 만들어지는 이유는 두 차원으로 나뉩니다.
 
@@ -34,7 +56,7 @@ temp 가 만들어지는 이유는 두 차원으로 나뉩니다.
 - **ORDER BY**
 - **UNION** (UNION ALL 제외)
 
-1·2 는 부분적으로 인덱스가 사용될 수 있습니다 (자세한 건 [외부 자료](https://github.com/dkGithup2022/dk-tech-notes/blob/main/rdbms-temp-tuning/deep-dive.md)). 3 은 인덱스로 회피 불가, 구조적으로 모음이 강제됩니다.
+1·2 는 부분적으로 인덱스가 사용될 수 있습니다 (자세한 건 [외부 자료]({{ "/rdbms-temp-tuning/deep-dive/" | relative_url }})). 3 은 인덱스로 회피 불가, 구조적으로 모음이 강제됩니다.
 
 **B. 서브쿼리가 외곽과 합쳐지지 못할 때** (구조 분리)
 
@@ -47,18 +69,18 @@ B 는 사실 A 가 한 단계 더 깊이 발생한 메타 케이스입니다 —
 
 각 차원의 세부 동작·출처는 별도 자료로 분리했습니다.
 
-→ [deep-dive.md](https://github.com/dkGithup2022/dk-tech-notes/blob/main/rdbms-temp-tuning/deep-dive.md) — MySQL 8.0 / Oracle 19c 카테고리별 메커니즘 · 평탄화·streaming 핵심 개념 · 영어 원문 인용
+→ [deep-dive.md]({{ "/rdbms-temp-tuning/deep-dive/" | relative_url }}) — MySQL 8.0 / Oracle 19c 카테고리별 메커니즘 · 평탄화·streaming 핵심 개념 · 영어 원문 인용
 
 > temp 테이블은 물리 페이지 이외에 복사된 공간이 필요하다.
 > 만약 램 위에 존재할 수 있는 크기보다 커지면 disk 와 스왑을 시도하고, 이것은 계단식으로 성능이 나빠지는 원인이 된다.
 
 ---
 
-## 3장. 회피 방법
+## 회피 방법
 
 상황별 카드는 흐름이 단순합니다. **근원 회피가 가능하면 우선**, 불가능하면 **temp 크기 줄이기 (핵심 id 선행 확정)**, 그래도 부족하면 **2단계 분리 (temp 위의 temp 피하기)**. 순서대로 봅니다.
 
-→ 세 카드를 실제 쿼리·EXPLAIN 으로 검증한 시뮬레이션 결과는 [tuning_test/report.md](https://github.com/dkGithup2022/dk-tech-notes/blob/main/rdbms-temp-tuning/tuning_test/report.md) 참조.
+→ 세 카드를 실제 쿼리·EXPLAIN 으로 검증한 시뮬레이션 결과는 [tuning_test/report.md]({{ "/rdbms-temp-tuning/tuning-test-report/" | relative_url }}) 참조.
 
 ### 3.1. 근원 회피 — 가능하면 우선
 
@@ -122,7 +144,7 @@ WHERE p.id IN (SELECT id FROM target_ids);
 | 인덱스 lookup 호출 수 | ~8,000,000 (외곽 row × 안쪽 lookup 곱연산)   | ~30,000 (1회 materialize 시 내부 lookup 합) | EXPLAIN ANALYZE `loops` 최대값                                            |
 
 
-상세 EXPLAIN·원문은 [tuning_test/report.md 3절 Case D](https://github.com/dkGithup2022/dk-tech-notes/blob/main/rdbms-temp-tuning/tuning_test/report.md).
+상세 EXPLAIN·원문은 [tuning_test/report.md 3절 Case D]({{ "/rdbms-temp-tuning/tuning-test-report/" | relative_url }}).
 
 ### 3.3. temp 위의 temp 피하기 — 깊이 기준 쿼리를 2단계로 분리
 
@@ -184,7 +206,7 @@ LIMIT 20;
 | 2단계 집계 재계산      | — (한 쿼리 안에서 외곽 GROUP BY 도 재실행)                    | 없음 (스냅샷 값 그대로 SELECT)                                    | EXPLAIN                        |
 
 
-상세 EXPLAIN·원문은 [tuning_test/report.md 4.2 Case G — case 2](https://github.com/dkGithup2022/dk-tech-notes/blob/main/rdbms-temp-tuning/tuning_test/report.md).
+상세 EXPLAIN·원문은 [tuning_test/report.md 4.2 Case G — case 2]({{ "/rdbms-temp-tuning/tuning-test-report/" | relative_url }}).
 
 1단계 결과는 애플리케이션 메모리로 옮겨지고, 2단계 IN 자리는 고정 상수 리스트가 됩니다. 중첩 temp 한 층이 사라집니다.
 
@@ -192,11 +214,11 @@ EXPLAIN 으로 본 차이는 **인덱스 활용 여부**입니다. BEFORE 의 `o
 
 외곽 WHERE 를 더 정교하게 짜도 서브쿼리 구조를 자르지 않으면 같은 풀스캔이 반복됩니다. 이 분리가 항상 가능한 것은 아닙니다. 옵티마이저가 어떻게 풀어내는지·애초에 자를 수 있는 구조인지는 현장에 가봐야 압니다. 자를 수 있다면 시도해봄직합니다.
 
-1단계·2단계 사이에 다른 tx 가 데이터를 바꾸면 결과가 어긋날 수 있습니다 — 애플리케이션 tx 로 묶어야 하고, 격리 수준 주의도 필요합니다. 자세한 건 4장에서 다룹니다.
+1단계·2단계 사이에 다른 tx 가 데이터를 바꾸면 결과가 어긋날 수 있습니다 — 애플리케이션 tx 로 묶어야 하고, 격리 수준 주의도 필요합니다. 자세한 건 아래 검증 섹션에서 다룹니다.
 
 ---
 
-## 4장. 검증 — 동시성과 동치성
+## 검증 — 동시성과 동치성
 
 2단계 분리 (3.3) 는 한 쿼리가 두 쿼리로 나뉘는 만큼 두 가지를 챙깁니다.
 
