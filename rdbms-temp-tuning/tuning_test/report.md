@@ -16,7 +16,7 @@ permalink: /rdbms-temp-tuning/tuning-test-report/
 
 본문([RDBMS SQL 쿼리 튜닝]({{ "/rdbms-temp-tuning/" | relative_url }})) 회피 카드 세 개 (근원 회피 / temp 크기 줄이기 / 2단계 분리) 를 실제 MySQL 8.0.31 에서 BEFORE/AFTER 로 검증한 결과.
 
-실행 방법은 [`README.md`](https://github.com/dkGithup2022/dk-tech-notes/blob/main/rdbms-temp-tuning/tuning_test/README.md) 참조. 원문 EXPLAIN 출력은 [`explains/case-*.txt`](https://github.com/dkGithup2022/dk-tech-notes/tree/main/rdbms-temp-tuning/tuning_test/explains) 원본.
+실행 방법은 [테스트 환경 셋업]({{ "/rdbms-temp-tuning/tuning-test-setup/" | relative_url }}) 참조. 원문 EXPLAIN 출력은 [`explains/case-*.txt`](https://github.com/dkGithup2022/dk-tech-notes/tree/main/rdbms-temp-tuning/tuning_test/explains) 원본.
 
 ---
 

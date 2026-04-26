@@ -68,7 +68,7 @@ temp 가 만들어지는 두 차원:
 
 ## 회피 방법
 
-사측 실제 쿼리는 가져올 수 없어, 동일 메커니즘을 재현한 테스트 환경에서 BEFORE/AFTER 를 측정해 참고로 두었습니다. 실제 쿼리와 EXPLAIN 결과는 [튜닝 테스트 리포트]({{ "/rdbms-temp-tuning/tuning-test-report/" | relative_url }}) 에 정리되어 있습니다.
+사측 실제 쿼리는 가져올 수 없어, 동일 메커니즘을 재현한 테스트 환경에서 BEFORE/AFTER 를 측정해 참고로 두었습니다. 실제 쿼리와 EXPLAIN 결과는 [튜닝 테스트 리포트]({{ "/rdbms-temp-tuning/tuning-test-report/" | relative_url }}) 에, 재현용 Docker 환경은 [테스트 환경 셋업]({{ "/rdbms-temp-tuning/tuning-test-setup/" | relative_url }}) 에 정리되어 있습니다.
 
 | 항목 | 값 |
 | --- | --- |

@@ -1,6 +1,20 @@
-# tuning_test — 본문 회피 패턴 검증 환경
+---
+title: "테스트 환경 셋업"
+parent: "RDBMS SQL 쿼리 튜닝 — temp 테이블 회피"
+nav_order: 3
+permalink: /rdbms-temp-tuning/tuning-test-setup/
+---
 
-`resume/notes/slow-query-migration-v2.md` 본문의 3장 회피 패턴을 MySQL 8.0.31 에서 BEFORE/AFTER 비교 가능한 쿼리로 재현.
+# tuning_test — 본문 회피 패턴 검증 환경
+{: .no_toc }
+
+## 목차
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+본문([RDBMS SQL 쿼리 튜닝]({{ "/rdbms-temp-tuning/" | relative_url }})) 회피 패턴을 MySQL 8.0.31 에서 BEFORE/AFTER 비교 가능한 쿼리로 재현.
 
 ## 본문 매핑
 
@@ -10,7 +24,7 @@
 | 3.2 temp 크기 줄이기 (id 선행 확정) | Case D (`03-case-d.sql`) | `DEPENDENT SUBQUERY × 3` → `DERIVED × 2` + hash join |
 | 3.3 2단계 분리 (SUM 스냅샷 + VALUES) | Case G (`07-case-g1.sql`, `08-case-g2.sql`) | `DEPENDENT SUBQUERY` 제거 + `PRIMARY KEY` lookup |
 
-상세 측정 결과·인사이트는 [`report.md`](report.md) 에 정리.
+상세 측정 결과·인사이트는 [튜닝 테스트 리포트]({{ "/rdbms-temp-tuning/tuning-test-report/" | relative_url }}) 에 정리.
 
 ## 폴더 구조
 
@@ -53,7 +67,7 @@ tuning_test/
 
 ```bash
 # 1. 기동 (최초 시 MySQL 이미지 pull + 초기화 스크립트 자동 실행)
-cd resume/tuning_test/docker
+cd rdbms-temp-tuning/tuning_test/docker
 docker compose up -d
 
 # 2. 로그로 초기화 완료 확인 (데이터 생성까지 1~2분)
@@ -112,7 +126,7 @@ docker exec -i mysql-tuning-test mysql -uroot -ptestpw tuning \
 ## 종료·정리
 
 ```bash
-cd resume/tuning_test/docker
+cd rdbms-temp-tuning/tuning_test/docker
 docker compose down           # 컨테이너만 제거, 데이터 유지
 docker compose down -v        # 볼륨까지 제거 (재초기화 원할 때)
 ```
