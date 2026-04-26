@@ -8,6 +8,10 @@ permalink: /rdbms-temp-tuning/tuning-test-report/
 # tuning_test 실험 결과 리포트
 {: .no_toc }
 
+해당 테스트는 docker 와 스크립트 설치 후 로컬에서 재현할 수 있습니다.
+
+링크: <https://github.com/dkGithup2022/dk-tech-notes/tree/main/rdbms-temp-tuning/tuning_test>
+
 ## 목차
 {: .no_toc .text-delta }
 
