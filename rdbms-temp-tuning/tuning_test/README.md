@@ -8,6 +8,10 @@ permalink: /rdbms-temp-tuning/tuning-test-setup/
 # tuning_test — 본문 회피 패턴 검증 환경
 {: .no_toc }
 
+해당 테스트는 docker 와 스크립트 설치 후 로컬에서 재현할 수 있습니다.
+
+링크: <https://github.com/dkGithup2022/dk-tech-notes/tree/main/rdbms-temp-tuning/tuning_test>
+
 ## 목차
 {: .no_toc .text-delta }
 
