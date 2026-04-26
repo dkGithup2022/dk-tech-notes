@@ -1,0 +1,22 @@
+services:
+  mysql-tuning:
+    image: mysql:8.0.31
+    container_name: mysql-tuning-test
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: testpw
+      MYSQL_DATABASE: tuning
+    ports:
+      - "13306:3306"
+    volumes:
+      - ./init:/docker-entrypoint-initdb.d
+      - mysql-tuning-data:/var/lib/mysql
+    command: >
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+      --tmp-table-size=16M
+      --max-heap-table-size=16M
+      --cte-max-recursion-depth=1000000
+
+volumes:
+  mysql-tuning-data:

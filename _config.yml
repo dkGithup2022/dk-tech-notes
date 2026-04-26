@@ -1,0 +1,17 @@
+title: dk-tech-notes
+description: 엔지니어링 노트
+baseurl: "/dk-tech-notes"
+url: "https://dkGithup2022.github.io"
+theme: minima
+permalink: /:year/:month/:day/:title/
+
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - vendor
+  - .bundle
+  - README.md
